@@ -6,26 +6,6 @@ var player1 = "○";
 var player2 = "×";
 
 // marubatu 共通関数
-function getObj(id)
-{
-  return document.getElementById(id);
-}
-
-function getCount()
-{
-  return document.getElementsByClassName('panel').length;
-}
-
-function getNowPlayer()
-{
-  return (getCount() % 2 == 0) ? player1 : player2 ;
-}
-
-function getPanelValue(id)
-{
- return getObj(id).Value;
-}
-
 function inputPanel(id)
 {
   var obj = getObj(id) ;
@@ -46,44 +26,72 @@ function inputPanel(id)
   judgeGameEnd(id,player) ;
 }
 
-function mouseOver(id)
-{
- var obj = getObj(id);
-  obj.style.backgroundColor = "lavender" ;
-}
-
-function mouseOut(id)
-{
-  var obj = getObj(id);   
-  obj.style.backgroundColor = "white" ;
-}
-
-function gameSet()
+function gameReset()
 {
   window.location.reload();
 }
 
-function judgeGameEnd(id,player)
-{  
-  if(judgeDrow() || judgeWin(player))
-  {
-    endGame(player);
-  }
+function endGame(player)
+{
+    var result = getObj('gameResult');
+    if( isPlayer(player) ){
+      result.innerHTML = player+"の勝ちです";
+    }else{
+      result.innerHTML = "引き分けです";      
+    }
 }
 
-function judgeDrow()
+//オブジェクト　ゲットメソッド
+function getObj(id)
 {
-  return (getCount() == 9)
+  return document.getElementById(id);
+}
+
+function getCount()
+{
+  return document.getElementsByClassName('panel').length;
+}
+
+function getNowPlayer()
+{
+  return (getCount() % 2 == 0) ? player1 : player2 ;
+}
+
+function getPanelValue(id)
+{
+ return getObj(id).Value;
+}
+
+//オブジェクト　判定用メソッド
+function isPlayer(player)
+{
+  return (player == player1 || player == player2) ;
 }
 
 function islineClear(i,j,k)
 {
   var player = getNowPlayer();
-  if((i == j) && (j == k) && (i == player1 || i == player2) )
+  if((i == j) && (j == k) && isPlayer(i) )
   {
     return true ;
   }
   return false ;
+}
+
+function judgeGameEnd(id,player)
+{  
+  if(judgeWin(player))
+  {
+    endGame(player);
+  }else if(judgeDrow())
+  {
+    endGame("");    
+  }
+}
+
+function judgeDrow()
+{
+  return getCount() == 9  ;
 }
 
 function judgeWin(player)
@@ -113,9 +121,16 @@ function judgeWin(player)
   }
 }
 
-function endGame(player)
+//　マウス操作のイベント
+function mouseOver(id)
 {
-    var obj = getObj('gameMain');
-    var result = getObj('gameResult');
-    result.innerHTML = player+"の勝ちです";
+ var obj = getObj(id);
+  obj.style.backgroundColor = "lavender" ;
 }
+
+function mouseOut(id)
+{
+  var obj = getObj(id);   
+  obj.style.backgroundColor = "white" ;
+}
+
