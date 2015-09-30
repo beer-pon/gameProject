@@ -1,0 +1,25 @@
+tr.trGameLine
+{
+	width:240;
+}
+
+td.tdGameLine
+{
+	width:80;
+	height:80;
+}
+
+div.panel
+{
+	text-align: center; 
+	font-size: 40;
+}
+
+div#waku
+{
+  border:8px double navy;
+  width:400px;
+  height:300px;
+  font-size:18pt;
+  overflow:auto;
+}
