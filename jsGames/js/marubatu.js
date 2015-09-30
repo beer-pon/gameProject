@@ -18,17 +18,12 @@ function getCount()
 
 function getNowPlayer()
 {
-  if(getCount() % 2 == 0)
-  {
-    return player1 ;
-  }
-  return player2 ;
+  return (getCount() % 2 == 0) ? player1 : player2 ;
 }
 
 function getPanelValue(id)
 {
- var value = getObj(id).Value;
- return value;
+ return getObj(id).Value;
 }
 
 function inputPanel(id)
@@ -60,7 +55,7 @@ function mouseOver(id)
 function mouseOut(id)
 {
   var obj = getObj(id);   
-  obj.style.backgroundColor = "#ffffff" ;
+  obj.style.backgroundColor = "white" ;
 }
 
 function gameSet()
