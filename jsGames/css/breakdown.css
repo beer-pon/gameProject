@@ -1,0 +1,22 @@
+tr.trGameLine
+{
+	width:240;
+}
+
+td.tdGameLine
+{
+	width:80;
+	height:80;
+}
+
+.tdGameLine:hover
+{
+	background-color: lavender;
+}
+
+div.panel
+{
+	text-align: center; 
+	font-size: 40;
+}
+
