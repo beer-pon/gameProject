@@ -5,6 +5,8 @@ var count = 0;
 var player1 = "player1";
 var player2 = "player2";
 
+var panelImages = new Object() ;
+
 function creatPanel(count)
 {
 
@@ -21,6 +23,32 @@ function creatPanel(count)
     }
     table.append(trTag); 
   }
+  
+  setPanelImage();
+}
+
+function setPanelImage()
+{
+  var random = generate_randomx(3);
+  clearArryObjct( panelImages ) ;
+  var count = getCount() ;
+  for(var i = 0 ; i <= count ; ++i)
+  {
+    panelImages[getPanelId(i)] = random[1];
+  }
+}
+function getPanelImageId(id)
+{
+  return panelImages[getPanelId(id)];
+}
+
+function getImageSouce(id)
+{
+  var path = './image/' ;
+  var name = 'image' + getPanelImageId(id) ;
+  var jpg = '.jpg' ;
+  
+  return path + name + jpg ;
 }
 
 function createTrTag(id)
@@ -39,18 +67,7 @@ function createTdTag(obj,id)
 }
 
 function openPanel(id){
-  document.getElementById('test').innerHTML = "<p>"+id+"</p>";
-}
-
-function setPanelEvent(){
-  var count = getCount();
-  for( var i = 1; i <= count ; i++){
-    var panelId = getPanelId(i);
-    var obj = document.getElementById(panelId);
-    addEvent(obj,'mouseover',mouseOver(panelId));
-    obj.onmouseover = mouseOver(panelId);
-    obj.onmouseout = mouseOut(panelId);    
-  }
+  document.getElementById(getPanelId(id)).innerHTML = "<img src="+"'"+getImageSouce(id)+"' />";
 }
 
 function getPanelId(id){
@@ -71,4 +88,35 @@ function changeTypeHidden(obj)
 function getTdObj(id)
 {
   return $('#' + getPanelId(id));
+}
+
+// オブジェクトクリアメソッド
+function clearArryObjct( obj )
+{
+  if (obj != null){
+    for( var key in obj){
+      delete obj[key] ;
+    }
+  }
+}
+
+function generate_randomx(count) {
+  //生成した乱数を格納する配列を初期化
+  var generated = new Array();
+  //生成した乱数を格納している配列の長さ（生成した乱数の数）
+  var generatedCount = generated.length;
+  //パラメータ count の数だけ Math.random()で乱数を発生
+  for(var i = 0 ; i < count; i++){
+    var candidate = Math.floor(Math.random() * count);
+    //今まで生成された乱数と同じ場合は再度乱数を発生
+    for(var j = 0; j < generatedCount; j++) {
+      if(candidate == generated[j]){
+        candidate = Math.floor(Math.random() * count);
+        j= -1;
+      }
+    }
+    generated[i] = candidate; 
+    generatedCount++;
+  }
+  return generated;  
 }
