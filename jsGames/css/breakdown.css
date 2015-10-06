@@ -20,3 +20,8 @@ div.panel
 	font-size: 40;
 }
 
+img.panelImage
+{
+	width: 80;
+	height: 80;
+}
