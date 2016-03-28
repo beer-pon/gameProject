@@ -1,0 +1,52 @@
+﻿div .day_block{
+	border: black solid 1px;
+	display: table-cell;
+	table-layout: fixed
+}
+div .day_comment{
+	display: table;
+}
+div .week_day_text{
+	border: black solid 1px;
+	width: 250px;
+	height: 100px;
+	display: table-cell;
+	table-layout: fixed
+}
+div .lectures_text{
+	border: black solid 1px;
+	width: 250px;
+	height: 70px;
+}
+div .day_lectures{
+}
+div .week_impression{
+	border: black solid 1px;
+	width: 250px;
+	height: 100px;
+}
+div .educator_comment{
+	border: black solid 1px;
+	width: 250px;
+	height: 100px;
+	clear;both;
+}
+div .one_day_box{
+    margin-right: auto;
+    margin-left: 0px;
+}
+
+div .outer_frame{
+	display: table-cell;
+	table-layout: fixed;
+	vertical-align: top;
+}
+div .description{
+    width: 30px;
+}
+span{
+	display: inline-block;
+    text-align: center;
+    border: black solid 1px;
+	width: 30px;
+}

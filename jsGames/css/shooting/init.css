@@ -1,0 +1,8 @@
+div#waku
+{
+  border:8px double navy;
+  width:400px;
+  height:300px;
+  font-size:18pt;
+  overflow:auto;
+}
