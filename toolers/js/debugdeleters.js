@@ -58,9 +58,7 @@ function setFile(fileId,textAreaId){
 }
 
 function checkCodeRules(text){
-  // error文言を格納するオブジェクト
-  var startDebug = "#ifdef DEBUG" ;
-  var endDebug = "#endif" ;
+  // 出力フラグ
   var outputFlg = true ;
 
   text.replace('/\r\n|\r/g', "\n") ;
@@ -68,7 +66,7 @@ function checkCodeRules(text){
 
   $.each(lines,function(i,line){
     i++ ;
-    // ;の前の空白確認
+    // debug文の開始
     if( ~line.indexOf("#ifdef DEBUG")){
       outputFlg = false ;
     }
@@ -77,6 +75,7 @@ function checkCodeRules(text){
       errorMessageObj.addErrorMassage(line);      
     }
 
+    // debug文の終了
     if( ~line.indexOf("#endif") ){
       outputFlg = true ;
     }
