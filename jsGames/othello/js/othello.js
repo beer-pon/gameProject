@@ -1,12 +1,6 @@
-window.othello = "test";
 $(function() {
-    if (window.othello) {
-        othello.init();
-    }
+    othello.init();
 })
-
-
-
 
 //--------------------------------
 //  private game method
@@ -16,7 +10,6 @@ window.othello = (function() {
     var WHITE = "white";
     var NONE = "";
     var BORD_SIZE = 8;
-    var gameBord = $("#bord");
     var nowPlayerColor;
 
     var gameController = {
@@ -35,10 +28,10 @@ window.othello = (function() {
             if (othelloLogic.validation(currentTarget)) {
                 alert("ここには置けません");
             } else {
-                if (cellController.setCellColorImgEvent(currentTarget, nowPlayerColor)) {
-                    othelloLogic.reverse(currentTarget);
-                    this.changePlayer();
-                }
+                cellController.setCellColorImgByTarget(currentTarget, nowPlayerColor)
+                othelloLogic.reverse(currentTarget);
+                othelloLogic.checkWin();
+                this.changePlayer();
             }
         },
         initSetEvent: function() {
@@ -50,7 +43,6 @@ window.othello = (function() {
             $(".td-cell").find("div").off("click");
         },
         changePlayer: function() {
-            othelloLogic.checkWin();
             if (BLACK == nowPlayerColor) {
                 nowPlayerColor = WHITE;
             } else {
@@ -71,32 +63,19 @@ window.othello = (function() {
 
         function _setCellImg(target, color) {
             var targetObj = $(target);
-            if (_validation(target)) {
-                if (BLACK == color) {
-                    targetObj.append(BLACK_IMG_TAG);
-                } else {
-                    targetObj.append(WHITE_IMG_TAG);
-                }
-                targetObj.off("click");
-                return true;
+            if (BLACK == color) {
+                targetObj.append(BLACK_IMG_TAG);
+            } else {
+                targetObj.append(WHITE_IMG_TAG);
             }
-            return false;
-        };
-
-        //　基本的に不要なチェック　処理の不正を検知する
-        function _validation(target) {
-            if ($(target).find("img").length == 0) {
-                return true;
-            }
-            console.log("ここのチェックに入るのはおかしい！！処理を見直す事");
-            return false;
+            targetObj.off("click");
         };
         return {
             setCellColorImg: function(x, y, color) {
                 var target = _getTargetCell(x, y);
                 return _setCellImg(target, color);
             },
-            setCellColorImgEvent(target, color) {
+            setCellColorImgByTarget(target, color) {
                 return _setCellImg(target, color);
             },
             clearCellColorImg: function(target) {
@@ -113,24 +92,12 @@ window.othello = (function() {
 
     // オセロのロジック
     var othelloLogic = (function() {
+        // 検索の際の方向
         var serachDirection = [-1, 0, 1];
-        // 反対の色を返す
-        // 無い場合はNONE
-        function _getOppositeColor(color) {
-            if (BLACK = color) {
-                return WHITE;
-            }
-            if (WHITE == color) {
-                return BLACK;
-            }
-            return NONE;
-        }
-
         // 指定された方向でひっくり返せるかどうか検索する
         // retrun ひっくり返せるオブジェクトのリストを返す
         function _doSearch(x, y, moveX, moveY, searchColor) {
             var result = [];
-            var reverseFlg = false;
             var targetX = _addNum(x, moveX);
             var targetY = _addNum(y, moveY);
             var targetColor = _getColor(targetX, targetY);
@@ -155,26 +122,25 @@ window.othello = (function() {
                 if (NONE == targetColor) {
                     break;
                 } else if (searchColor == targetColor) {
-                    reverseFlg = true;
-                    break;
-                } else {
-                    result.push(cellController.getTargetCell(targetX, targetY));
+                    // 自分の色で挟んだらそこまでの内容を返す
+                    return result;
                 }
-            }
-
-            if (reverseFlg) {
-                return result;
+                // ターゲットの色が無色でも検索している色でもなければターゲットを追加
+                result.push(cellController.getTargetCell(targetX, targetY));
             }
             return [];
         }
 
         // ひっくり返せるかどうか検索
         // retrun ひっくり返せるオブジェクトのリストを返す
-        function _search(x, y, searchColor) {
+        function _search(target, searchColor) {
+            var id = $(target).attr("id");
+            var targetX = id.split("-")[0];
+            var targetY = id.split("-")[1];
             var reverseList = [];
             for (var dirX of serachDirection) {
                 for (var dirY of serachDirection) {
-                    var temp = _doSearch(x, y, dirX, dirY, searchColor);
+                    var temp = _doSearch(targetX, targetY, dirX, dirY, searchColor);
                     if (temp.length > 0) {
                         reverseList = reverseList.concat(temp);
                     }
@@ -185,10 +151,7 @@ window.othello = (function() {
 
         // ひっくり返せればtrueを返す
         function _isAbleReternPosition(target, searchColor) {
-            var id = $(target).attr("id");
-            var targetX = id.split("-")[0];
-            var targetY = id.split("-")[1];
-            var result = _search(targetX, targetY, searchColor);
+            var result = _search(target, searchColor);
             if (result.length > 0) {
                 return true;
             }
@@ -196,25 +159,18 @@ window.othello = (function() {
         }
 
         function _doReverse(target, reversColor) {
-            var id = $(target).attr("id");
-            var targetX = id.split("-")[0];
-            var targetY = id.split("-")[1];
-            var result = _search(targetX, targetY, reversColor);
+            var result = _search(target, reversColor);
             $.each(result, function(i, e) {
                 cellController.clearCellColorImg(e);
-                cellController.setCellColorImgEvent(e, reversColor);
+                cellController.setCellColorImgByTarget(e, reversColor);
             });
-        }
-
-        function _getImg(target) {
-            return $(target).find("img");
         }
 
         function _getColor(x, y) {
             var target = cellController.getTargetCell(x, y);
             var color = NONE;
             if (target) {
-                var targetColor = _getImg(target).attr("color");
+                var targetColor = $(target).find("img").attr("color");
                 if (BLACK == targetColor) {
                     color = BLACK;
                 } else if (WHITE == targetColor) {
@@ -244,9 +200,6 @@ window.othello = (function() {
             },
             reverse: function(target) {
                 _doReverse(target, nowPlayerColor);
-            },
-            nextPlayerColor: function() {
-                return _getOppositeColor(nowPlayerColor);
             },
             checkWin: function() {
                 //勝敗判定ロジックを実装予定
@@ -279,20 +232,20 @@ window.othello = (function() {
             this.view();
         },
         view: function() {
-            this.update();
+            this._update();
             this.whiteScoreObj.text(this.whiteScore);
             this.BlackScoreObj.text(this.blackScore);
             this.remainScoreObj.text(this.remainScore);
             this.playerViewObj.text(nowPlayerColor);
         },
-        update: function() {
+        //-------------------
+        // private logic
+        //-------------------
+        _update: function() {
             this.blackScore = this._blackCnt();
             this.whiteScore = this._whiteCnt();
             this.remainScore = eval(this.baseCnt - this.blackScore - this.whiteScore);
         },
-        //-------------------
-        // private logic
-        //-------------------
         _blackCnt: function() {
             return this._getCnt(BLACK);
         },
@@ -313,27 +266,26 @@ window.othello = (function() {
     // 補助機能用
     var AuxiliaryFunction = {
         init: function() {
-            this.setEvent();
+            this._setEvent();
         },
-        setEvent: function() {
-            this.setResetEvent();
-            this.setPassEvent();
+        _setEvent: function() {
+            this._setResetEvent();
+            this._setPassEvent();
         },
-        setResetEvent: function() {
+        _setResetEvent: function() {
             function reset() {
                 gameController.init();
                 gameScore.init();
             }
             $('#function-reset').on("click", function() { reset() });
         },
-        setPassEvent: function() {
+        _setPassEvent: function() {
             function pass() {
                 gameController.changePlayer();
             }
             $('#function-pass').on("click", function() { pass() });
         }
     }
-
 
     // window.othello return
     return {
