@@ -4,23 +4,37 @@ div#game-bord {
     border: 1px solid #000000;
     margin-left: 100px;
 }
+
 div.cell {
     width: 50px;
     height: 50px;
     margin: 0 auto;
 }
+
 div.score-bord {
     margin-left: 100px;
     margin-bottom: 10px;
     border: 1px solid #000000;
-    width: 300px;
+    width: 200px;
 }
+
 div.function-bord {
     margin-left: 10px;
     margin-bottom: 10px;
     border: 1px solid #000000;
-    width: 100px;    
+    width: 200px;
 }
+
+div.victory-bord {
+    margin-left: 100px;
+    margin-bottom: 10px;
+    width: 500px;
+}
+
+div.panel{
+    margin-left: 20px;
+}
+
 td.td-cell {
     width: 62px;
     height: 62px;
@@ -28,6 +42,10 @@ td.td-cell {
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 5px;
+}
+button {
+    margin-left: 10px;
+    margin-bottom: 5px;
 }
 
 img.cell {

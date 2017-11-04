@@ -30,6 +30,7 @@ window.othello = (function() {
             } else {
                 cellController.setCellColorImgByTarget(currentTarget, nowPlayerColor)
                 othelloLogic.reverse(currentTarget);
+                gameScore.view();
                 othelloLogic.checkWin();
                 this.changePlayer();
             }
@@ -48,7 +49,6 @@ window.othello = (function() {
             } else {
                 nowPlayerColor = BLACK;
             }
-            gameScore.view();
         },
     }
 
@@ -184,6 +184,53 @@ window.othello = (function() {
             return parseInt(a) + parseInt(b);
         }
 
+        function _judgeWinner() {
+            if (gameScore.blackScore > gameScore.whiteScore) {
+                return BLACK;
+            } else if (gameScore.blackScore < gameScore.whiteScore) {
+                return WHITE;
+            }
+            return NONE;
+        }
+
+        function _getNoneSpace() {
+            var list = [];
+            $("#bord").find("div" + ".cell").each(function(i, e) {
+                if (!$(e).find("img").attr("color")) {
+                    list.push(e);
+                }
+            });
+            return list;
+        }
+
+        // 置ける場合はtrue 置けない場合はfalse
+        function _isCanPutCell() {
+            // おいていないcellを取得する
+            var noneList = _getNoneSpace();
+            for(var i of noneList){
+              if(_isAbleReternPosition(i,BLACK)){
+                return true ;
+              }
+              if(_isAbleReternPosition(i,WHITE)){
+                return true ;
+              }
+          }
+          return false ;
+        }
+
+        function _checkGameEnd() {
+            //　残りのマス目がなくなったら終了
+            if (gameScore.remainScore <= 0) {
+                return true;
+            }
+            //　黒と白両方ともおける場所がなくなったら終了
+            if (!_isCanPutCell()) {
+                return true;
+            }
+
+            return false;
+        }
+
         return {
             // errorの場合　true
             validation: function(target) {
@@ -202,8 +249,11 @@ window.othello = (function() {
                 _doReverse(target, nowPlayerColor);
             },
             checkWin: function() {
-                //勝敗判定ロジックを実装予定
-                console.log("call checkWin");
+                if (_checkGameEnd()) {
+                    // ゲーム終了時の処理
+                    victoryBord.view(_judgeWinner());
+                    gameController.eventClear();
+                }
             }
         }
 
@@ -276,6 +326,7 @@ window.othello = (function() {
             function reset() {
                 gameController.init();
                 gameScore.init();
+                victoryBord.init();
             }
             $('#function-reset').on("click", function() { reset() });
         },
@@ -287,12 +338,32 @@ window.othello = (function() {
         }
     }
 
+    // 勝敗表示
+    var victoryBord = {
+        init: function() {
+            this.clearView();
+        },
+        view: function(winner) {
+            var message;
+            if (winner != NONE) {
+                message = "<div id='win-message'><font size='5' color='blue'>" + winner + "プレイヤーの勝ちです！</font></div>";
+            } else {
+                message = "<div id='win-message'><font>引き分けです！</font></div>";
+            }
+            $('#victory-bord').prepend(message);
+        },
+        clearView: function() {
+            $('#victory-bord').find("div").remove();
+        }
+    }
+
     // window.othello return
     return {
         init: function() {
             gameController.init();
             gameScore.init();
             AuxiliaryFunction.init();
+            victoryBord.init();
         }
     }
 }());
