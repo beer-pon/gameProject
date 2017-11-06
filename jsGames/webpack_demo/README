@@ -1,0 +1,49 @@
+-プロジェクトを作成するディレクトリで下記コマンドを実行
+npm install webpack -g
+
+-同じディレクトリで下記のコマンドを実行
+npm init
+
+(対話式で下記の通り入力)
+#  name: (webpack_demo)
+#  version: (1.0.0)
+#  description: demo
+#  entry point: (index.js) index.js
+#  test command:
+#  git repository:
+#  keywords:
+#  author: kozu
+#  license: (ISC) MIT
+#  About to write to C:\Users\tatsuya kozu\Documents\git\gameProject\jsGames\webpack_demo\package.json:
+#
+#  {
+#    "name": "webpack_demo",
+#    "version": "1.0.0",
+#    "description": "demo",
+#    "main": "index.js",
+#    "scripts": {
+#      "test": "echo \"Error: no test specified\" && exit 1"
+#    },
+#    "author": "kozu",
+#    "license": "MIT"
+#  }
+#
+#
+#  Is this ok? (yes) yes
+
+-webpack.config.js
+webpackの設定を記載する。
+　公式
+　https://webpack.github.io/docs/configuration.html
+
+-webpackのローカルインストール
+npm install webpack --save-dev
+
+-jsを作成
+作成後にwebpackコマンドを実行
+webpack
+
+
+
+-bableのインストール
+npm install --save-dev webpack babel-core babel-loader babel-preset-react babel-preset-es2015
