@@ -1,31 +1,36 @@
 <html lang="ja">
+
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
- <script type="text/javascript" src="./js/core/jquery.min.js"></script>
- <script type="text/javascript" src="./js/codeCheckers.js"></script>
- <link rel="stylesheet" type="text/css" href="./css/codeCheckers.css">
- </head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" src="./js/core/jquery.min.js"></script>
+  <script type="text/javascript" src="./js/codeCheckers.js"></script>
+  <script src="./js/core/jquery-linedtextarea.js"></script>
+  <link href="./css/core/jquery-linedtextarea.css" type="text/css" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="./css/codeCheckers.css">
+</head>
+
 <body>
-<title>toolers</title>
-<h1>【codeCheckers】</h1>
-<form name="test">
-<input type="file" id="selfile"><br>
-<div id="drop_zone">Drop files here</div>
-<output id="list"></output>
-<table>
-	<tr>
-		<th>ファイル</th>
-		<th>エラーメッセージ</th>
-	</tr>
-	<tr>
-		<td>
-		<textarea id="text1" name="txt" rows="100" cols="100" readonly ></textarea>
-		</td>
-		<td>
-			<textarea id="result" name="txt" rows="100" cols="100" readonly ></textarea>
-		</td>
-	</tr>
-</table>
-</form>
+  <title>toolers</title>
+  <h1>【codeCheckers】</h1>
+  <form name="test">
+    <input type="file" id="selfile"><br>
+    <div id="drop_zone">Drop files here</div>
+    <output id="list"></output>
+    <table>
+      <tr>
+        <th>ファイル</th>
+        <th>エラーメッセージ</th>
+      </tr>
+      <tr>
+        <td>
+          <textarea id="text1" name="txt" rows="100" cols="100" class="lined" readonly></textarea>
+        </td>
+        <td>
+          <textarea id="result" name="txt" rows="100" cols="100" readonly></textarea>
+        </td>
+      </tr>
+    </table>
+  </form>
 </body>
+
 </html>
